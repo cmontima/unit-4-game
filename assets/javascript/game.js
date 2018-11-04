@@ -1,9 +1,10 @@
 // Variables
-var computerScore;
-var userScore = [];
+var computerScore = 0;
+var userScore = 0;
 var crystalScore = 0;
 var wins = 0;
 var loses = 0;
+var newscore = 0;
 
 // Functions
 function computerScoreRandom() {
@@ -23,33 +24,30 @@ function initializeTexts() {
 
 function initializeCrystals() {
     for (var i = 0; i < 4; i++) {
-        userScore[i] = crystalScoreRandom();
+        crystalScoreRandom();
+        var crystal = $("#crystal-" + (i + 1));
+        crystal.attr("crystal-score", crystalScore);
+    };
 
-        var crystal = $(".crystals")
-        crystal.attr({
-            "class": 'crystal',
-            "crystal-score": crystalScore
-        });
+    crystal.html(crystalScore);
 
-        crystal.html(crystalScore);
-        $(".crystals").append(crystal);
-    }
 }
 
 function counter() {
     if (userScore > computerScore) {
         loses++;
+        reset();
     } else if (userScore === computerScore) {
         wins++;
+        reset();
     }
 }
 
 function reset() {
+    userScore = 0;
     computerScoreRandom();
-    crystalScoreRandom();
     initializeTexts();
     initializeCrystals();
-    userScore = 0;
 }
 
 $(document).ready(function () {
@@ -57,15 +55,14 @@ $(document).ready(function () {
         computerScoreRandom();
         initializeTexts();
         initializeCrystals();
-
-        $(".crystals").on("click", function () {
-            userScore += parseInt(crystalScore);
-            $("#userScore").text(userScore);
-            counter();
-        })
+    });
+    
+    $(".crystal").on("click", function () {
+        userScore += parseInt($(this).attr("crystal-score"));
+        $("#userScore").text(userScore);
+        counter();
     });
 });
-
 
 
 
